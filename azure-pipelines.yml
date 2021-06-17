@@ -187,35 +187,27 @@ stages:
         artifactName: terraform
         downloadPath: $(System.DefaultWorkingDirectory)
 
-    - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
+    - task: TerraformTaskV2@2
       inputs:
-        TemplatePath: '$(System.DefaultWorkingDirectory)/terraform/'
-        Arguments: 'init'
-        InstallTerraform: true
-        UseAzureSub: true
-        ConnectedServiceNameSelector: 'ConnectedServiceNameARM'
-        ConnectedServiceNameARM: 'Microsoft Azure Sponsorship (cf1c428b-5817-43e1-b40d-9dc85a4a7df7)'
-        ManageState: false
+        provider: 'azurerm'
+        command: 'init'
+        backendServiceArm: 'Azure Pass - Sponsorship(cf1c428b-5817-43e1-b40d-9dc85a4a7df7)'
+        backendAzureRmResourceGroupName: 'StorageForTerraform'
+        backendAzureRmStorageAccountName: 'tfstatesaver'
+        backendAzureRmContainerName: 'terraformstate'
+        backendAzureRmKey: 'tf/terraform.tfstate'
 
-    - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
+    - task: TerraformTaskV2@2
       inputs:
-        TemplatePath: '$(System.DefaultWorkingDirectory)/terraform/'
-        Arguments: 'plan'
-        InstallTerraform: true
-        UseAzureSub: true
-        ConnectedServiceNameSelector: 'ConnectedServiceNameARM'
-        ConnectedServiceNameARM: 'Microsoft Azure Sponsorship (cf1c428b-5817-43e1-b40d-9dc85a4a7df7)'
-        ManageState: false
+        provider: 'azurerm'
+        command: 'plan'
+        environmentServiceNameAzureRM: 'Azure Pass - Sponsorship(cf1c428b-5817-43e1-b40d-9dc85a4a7df7)'
 
-    - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
+    - task: TerraformTaskV2@2
       inputs:
-        TemplatePath: '$(System.DefaultWorkingDirectory)/terraform/'
-        Arguments: 'apply'
-        InstallTerraform: true
-        UseAzureSub: true
-        ConnectedServiceNameSelector: 'ConnectedServiceNameARM'
-        ConnectedServiceNameARM: 'Microsoft Azure Sponsorship (cf1c428b-5817-43e1-b40d-9dc85a4a7df7)'
-        ManageState: false
+        provider: 'azurerm'
+        command: 'apply'
+        environmentServiceNameAzureRM: 'Azure Pass - Sponsorship(cf1c428b-5817-43e1-b40d-9dc85a4a7df7)'
 
     - task: AzureResourceGroupDeployment@2
       displayName: Validate ARM template
